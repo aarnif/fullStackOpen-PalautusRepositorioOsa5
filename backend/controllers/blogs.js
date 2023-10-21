@@ -18,6 +18,8 @@ router.post("/", userExtractor, async (request, response) => {
     likes: likes ? likes : 0,
   });
 
+  console.log(blog);
+
   const user = request.user;
 
   if (!user) {
