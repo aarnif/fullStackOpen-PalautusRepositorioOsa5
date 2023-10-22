@@ -12,9 +12,6 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
   const successMessageType = "success";
@@ -61,27 +58,20 @@ const App = () => {
     setUser(null);
   };
 
-  const handleNewBlogSubmit = async () => {
-    event.preventDefault();
-
-    const newBlogContent = {
-      title: title,
-      author: author,
-      url: url,
-    };
-
-    console.log("Try to add new blog...");
-    console.log(newBlogContent);
-
+  const addNewBlog = async (blogObject) => {
+    let result = false;
     try {
-      const NewBlog = await Blogservice.addNew(newBlogContent);
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-      displayMessage(`Added blog titled ${NewBlog.title}`, successMessageType);
+      const newBlog = await Blogservice.addNew(blogObject);
+      displayMessage(
+        `Added new blog titled: ${newBlog.title}`,
+        successMessageType
+      );
+      result = true;
     } catch (exception) {
       displayMessage(exception.response.data.error, errorMessageType);
     }
+
+    return result;
   };
 
   const displayMessage = (message, type) => {
@@ -116,15 +106,7 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>Log out</button>
       </h3>
       <Togglable buttonLabel={"new blog"}>
-        <NewBlog
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
-          handleNewBlogSubmit={handleNewBlogSubmit}
-        />
+        <NewBlog addNewBlog={addNewBlog} />
       </Togglable>
       <h2>Blogs:</h2>
       {blogs.map((blog) => (

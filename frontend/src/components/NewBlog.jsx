@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 
-const NewBlog = ({
-  title,
-  setTitle,
-  author,
-  setAuthor,
-  url,
-  setUrl,
-  handleNewBlogSubmit,
-}) => {
+const NewBlog = ({ addNewBlog }) => {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
+
+  const handleNewBlogSubmit = () => {
+    event.preventDefault();
+
+    const newBlogContent = {
+      title: title,
+      author: author,
+      url: url,
+    };
+
+    console.log("Try to add new blog...");
+    console.log(newBlogContent);
+    console.log("result:");
+
+    addNewBlog(newBlogContent).then((result) => {
+      if (result) {
+        setTitle("");
+        setAuthor("");
+        setUrl("");
+      }
+    });
+  };
+
   return (
     <div>
       <h2>create new</h2>
