@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from 'prop-types'
 
 const NewBlog = ({ addNewBlog }) => {
   const [title, setTitle] = useState("");
@@ -63,4 +64,9 @@ const NewBlog = ({ addNewBlog }) => {
     </div>
   );
 };
+
+NewBlog.propTypes = {
+  addNewBlog : PropTypes.func.isRequired,
+}
+
 export default NewBlog;

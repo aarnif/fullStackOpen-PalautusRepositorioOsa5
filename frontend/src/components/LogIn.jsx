@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types'
 
 const LogIn = ({
   username,
@@ -34,4 +35,11 @@ const LogIn = ({
     </div>
   );
 };
+
+LogIn.propTypes = {
+  setUsername : PropTypes.func.isRequired,
+  setPassword : PropTypes.func.isRequired,
+  handleLogin: PropTypes.func.isRequired, 
+}
+
 export default LogIn;
