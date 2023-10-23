@@ -1,15 +1,26 @@
 import { useState } from "react";
 import "../index.css";
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, userName, updateBlog, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
 
-  const handleupdateBlog = () => {
+  const handleUpdateBlog = () => {
     event.preventDefault();
     console.log("Try to update blog...");
     updateBlog({ ...blog, likes: likes + 1 });
     setLikes(likes + 1);
+  };
+
+  const handleRemoveBlog = () => {
+    event.preventDefault();
+    const deleteBlogConfirm = window.confirm(
+      `Remove blog ${blog.title} by ${blog.author}`
+    );
+    if (deleteBlogConfirm) {
+      console.log("Try to remove blog...");
+      deleteBlog(blog);
+    }
   };
 
   const blogStyle = {
@@ -25,9 +36,12 @@ const Blog = ({ blog, updateBlog }) => {
         <>
           <div>{blog.url}</div>
           <div>
-            like {blog.likes} <button onClick={handleupdateBlog}>like</button>
+            like {blog.likes} <button onClick={handleUpdateBlog}>like</button>
           </div>
           <div>{blog.user.name}</div>
+          {blog.user.username === userName && (
+            <button onClick={handleRemoveBlog}>Remove</button>
+          )}
         </>
       );
     }

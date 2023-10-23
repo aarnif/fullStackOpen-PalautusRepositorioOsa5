@@ -12,7 +12,7 @@ const getAll = () => {
   return request.then((response) => response.data);
 };
 
-const addNew = (newBlogContent) => {
+const add = (newBlogContent) => {
   console.log(token);
   const config = {
     headers: { Authorization: token },
@@ -38,4 +38,15 @@ const update = (updateBlogContent) => {
   return request.then((response) => response.data);
 };
 
-export default { setToken, getAll, addNew, update };
+const remove = (blogToBeDeleted) => {
+  console.log(token);
+  const config = {
+    headers: { Authorization: token },
+  };
+  console.log(config);
+  console.log(blogToBeDeleted);
+  const request = axios.delete(`${baseUrl}/${blogToBeDeleted.id}`, config);
+  return request.then((response) => response.data);
+};
+
+export default { setToken, getAll, add, update, remove };

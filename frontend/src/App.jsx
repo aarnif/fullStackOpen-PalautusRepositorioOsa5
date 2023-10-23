@@ -61,7 +61,7 @@ const App = () => {
   const addNewBlog = async (blogObject) => {
     let result = false;
     try {
-      const newBlog = await Blogservice.addNew(blogObject);
+      const newBlog = await Blogservice.add(blogObject);
       displayMessage(
         `Added new blog titled: ${newBlog.title}`,
         successMessageType
@@ -79,6 +79,18 @@ const App = () => {
       const updateBlog = await Blogservice.update(blogObject);
       displayMessage(
         `Updated likes for blog titled: ${updateBlog.title}`,
+        successMessageType
+      );
+    } catch (exception) {
+      displayMessage(exception.response.data.error, errorMessageType);
+    }
+  };
+
+  const deleteBlog = async (blogObject) => {
+    try {
+      const deleteBlog = await Blogservice.remove(blogObject);
+      displayMessage(
+        `Removed blog titled: ${blogObject.title}`,
         successMessageType
       );
     } catch (exception) {
@@ -124,7 +136,13 @@ const App = () => {
       {blogs // sort primary based on likes and secondary on author
         .sort((a, b) => b.likes - a.likes || a.author.localeCompare(b.author))
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            userName={user.username}
+            updateBlog={updateBlog}
+            deleteBlog={deleteBlog}
+          />
         ))}
     </div>
   );
