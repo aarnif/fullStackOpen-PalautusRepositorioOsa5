@@ -121,9 +121,11 @@ const App = () => {
         <NewBlog addNewBlog={addNewBlog} />
       </Togglable>
       <h2>Blogs:</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
-      ))}
+      {blogs // sort primary based on likes and secondary on author
+        .sort((a, b) => b.likes - a.likes || a.author.localeCompare(b.author))
+        .map((blog) => (
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        ))}
     </div>
   );
 };
