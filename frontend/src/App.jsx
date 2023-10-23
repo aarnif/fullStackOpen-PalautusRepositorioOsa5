@@ -74,6 +74,18 @@ const App = () => {
     return result;
   };
 
+  const updateBlog = async (blogObject) => {
+    try {
+      const updateBlog = await Blogservice.update(blogObject);
+      displayMessage(
+        `Updated likes for blog titled: ${updateBlog.title}`,
+        successMessageType
+      );
+    } catch (exception) {
+      displayMessage(exception.response.data.error, errorMessageType);
+    }
+  };
+
   const displayMessage = (message, type) => {
     setMessage(message);
     setMessageType(type);
@@ -110,7 +122,7 @@ const App = () => {
       </Togglable>
       <h2>Blogs:</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       ))}
     </div>
   );

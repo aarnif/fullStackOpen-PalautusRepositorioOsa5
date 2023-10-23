@@ -1,8 +1,16 @@
 import { useState } from "react";
 import "../index.css";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [likes, setLikes] = useState(blog.likes);
+
+  const handleupdateBlog = () => {
+    event.preventDefault();
+    console.log("Try to update blog...");
+    updateBlog({ ...blog, likes: likes + 1 });
+    setLikes(likes + 1);
+  };
 
   const blogStyle = {
     paddingTop: 10,
@@ -17,7 +25,7 @@ const Blog = ({ blog }) => {
         <>
           <div>{blog.url}</div>
           <div>
-            like {blog.likes} <button>like</button>
+            like {blog.likes} <button onClick={handleupdateBlog}>like</button>
           </div>
           <div>{blog.user.name}</div>
         </>
