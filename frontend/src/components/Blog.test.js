@@ -52,3 +52,27 @@ test("renders blog title, author, url, likes and user after view button is press
   screen.getByText(/1023/i);
   screen.getByText(/John Doe/i);
 });
+
+test("updateBlog function is called every time the like button is clicked", async () => {
+  const updateBlog = jest.fn();
+  render(
+    <Blog
+      key={blog.id}
+      blog={blog}
+      userName={""}
+      updateBlog={updateBlog}
+      deleteBlog={() => {}}
+    />
+  );
+
+  const user = userEvent.setup();
+  const viewButton = screen.getByText("view");
+  await user.click(viewButton);
+  const likeButton = screen.getByText("like");
+
+  for (let i = 0; i < 2; ++i) {
+    await user.click(likeButton);
+  }
+
+  expect(updateBlog.mock.calls).toHaveLength(2);
+});
