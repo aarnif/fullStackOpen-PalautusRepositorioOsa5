@@ -46,13 +46,21 @@ describe("Blog app", function () {
         author: "Jimmy Doolittle",
         url: "http://www.fakeblogsite.com",
       };
-
-      cy.get("#title").type(newBlogContent.title);
-      cy.get("#author").type(newBlogContent.author);
-      cy.get("#url").type(newBlogContent.url);
-      cy.get("#submit-button").click();
-
+      cy.addBlog(newBlogContent);
       cy.contains("Express is awesome!");
+    });
+
+    it("A blog can be liked", function () {
+      const newBlogContent = {
+        title: "Express is awesome!",
+        author: "Jimmy Doolittle",
+        url: "http://www.fakeblogsite.com",
+      };
+      cy.addBlog(newBlogContent);
+      cy.contains("Express is awesome!").contains("view").click();
+      cy.contains("Express is awesome!").contains("like 0");
+      cy.contains("Express is awesome!").contains("like").click();
+      cy.contains("Express is awesome!").contains("like 1");
     });
   });
 });

@@ -32,3 +32,16 @@ Cypress.Commands.add("login", ({ username, password }) => {
     cy.visit("");
   });
 });
+
+Cypress.Commands.add("addBlog", (newBlog) => {
+  cy.request({
+    url: `${Cypress.env("backend")}/blogs`,
+    method: "POST",
+    body: { title: newBlog.title, author: newBlog.author, url: newBlog.url },
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")).token}`,
+    },
+  });
+
+  cy.visit("");
+});
