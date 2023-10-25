@@ -3,7 +3,7 @@ describe("Blog app", function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
     const user = {
       name: "John Doe",
-      username: "JohnD",
+      username: "johnD",
       password: "horsemeat",
     };
     cy.request("POST", "http://localhost:3003/api/users/", user);
@@ -17,7 +17,7 @@ describe("Blog app", function () {
   describe("Login", function () {
     it("succeeds with correct credentials", function () {
       cy.contains("login").click();
-      cy.get("#username").type("JohnD");
+      cy.get("#username").type("johnD");
       cy.get("#password").type("horsemeat");
       cy.get("#login-button").click();
 
@@ -31,6 +31,32 @@ describe("Blog app", function () {
       cy.get("#login-button").click();
 
       cy.contains("invalid username or password");
+    });
+  });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.contains("login").click();
+      cy.get("#username").type("johnD");
+      cy.get("#password").type("horsemeat");
+      cy.get("#login-button").click();
+
+      cy.contains("logged in");
+    });
+
+    it("A New blog can be created", function () {
+      const newBlogContent = {
+        title: "Express is awesome!",
+        author: "Jimmy Doolittle",
+        url: "http://www.fakeblogsite.com",
+      };
+
+      cy.get("#title").type(newBlogContent.title);
+      cy.get("#author").type(newBlogContent.author);
+      cy.get("#url").type(newBlogContent.url);
+      cy.get("#submit-button").click();
+
+      cy.contains("Express is awesome!");
     });
   });
 });
