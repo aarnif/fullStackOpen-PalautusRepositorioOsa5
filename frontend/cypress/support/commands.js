@@ -33,11 +33,32 @@ Cypress.Commands.add("login", ({ username, password }) => {
   });
 });
 
+Cypress.Commands.add("getAllBlogs", (newBlog) => {
+  cy.request({
+    url: `${Cypress.env("backend")}/blogs`,
+    method: "GET",
+  });
+
+  cy.visit("");
+});
+
 Cypress.Commands.add("addBlog", (newBlog) => {
   cy.request({
     url: `${Cypress.env("backend")}/blogs`,
     method: "POST",
     body: { title: newBlog.title, author: newBlog.author, url: newBlog.url },
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")).token}`,
+    },
+  });
+
+  cy.visit("");
+});
+
+Cypress.Commands.add("deleteBlog", (id) => {
+  cy.request({
+    url: `${Cypress.env("backend")}/blogs/${id}`,
+    method: "DELETE",
     headers: {
       Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")).token}`,
     },

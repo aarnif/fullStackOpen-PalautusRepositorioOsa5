@@ -50,7 +50,7 @@ const Blog = ({ blog, userName, updateBlog, deleteBlog }) => {
   return (
     <div style={blogStyle}>
       {" "}
-      <div>
+      <div id={blog.id}>
         {blog.title} {blog.author}{" "}
         <button onClick={() => setShowDetails(!showDetails)}>
           {showDetails ? "hide" : "view"}

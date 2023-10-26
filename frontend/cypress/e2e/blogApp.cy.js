@@ -1,6 +1,5 @@
 describe("Blog app", function () {
   beforeEach(function () {
-    cy.visit("");
     cy.request("POST", `${Cypress.env("backend")}/testing/reset`);
     const user = {
       name: "John Doe",
@@ -8,6 +7,7 @@ describe("Blog app", function () {
       password: "horsemeat",
     };
     cy.request("POST", `${Cypress.env("backend")}/users`, user);
+    cy.visit("");
   });
 
   it("Login form is shown", function () {
@@ -35,32 +35,37 @@ describe("Blog app", function () {
   });
 
   describe("When logged in", function () {
+    const newBlogContent = {
+      title: "Express is awesome!",
+      author: "Jimmy Doolittle",
+      url: "http://www.fakeblogsite.com",
+    };
+
     beforeEach(function () {
       cy.login({ username: "johnD", password: "horsemeat" });
       cy.contains("logged in");
+      cy.addBlog(newBlogContent);
+      cy.visit("");
     });
 
-    it("A New blog can be created", function () {
-      const newBlogContent = {
-        title: "Express is awesome!",
-        author: "Jimmy Doolittle",
-        url: "http://www.fakeblogsite.com",
-      };
-      cy.addBlog(newBlogContent);
+    it("new blog can be created", function () {
       cy.contains("Express is awesome!");
     });
 
-    it("A blog can be liked", function () {
-      const newBlogContent = {
-        title: "Express is awesome!",
-        author: "Jimmy Doolittle",
-        url: "http://www.fakeblogsite.com",
-      };
-      cy.addBlog(newBlogContent);
+    it("blog can be liked", function () {
       cy.contains("Express is awesome!").contains("view").click();
       cy.contains("Express is awesome!").contains("like 0");
       cy.contains("Express is awesome!").contains("like").click();
       cy.contains("Express is awesome!").contains("like 1");
+    });
+
+    it("blog can be deleted", function () {
+      cy.contains("Express is awesome!").invoke("attr", "id").as("idValue");
+      cy.get("@idValue").then((idValue) => {
+        cy.log(idValue);
+        cy.deleteBlog(idValue);
+      });
+      cy.get("html").should("not.contain", "Express is awesome!");
     });
   });
 });
