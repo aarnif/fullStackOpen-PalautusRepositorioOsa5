@@ -33,6 +33,10 @@ Cypress.Commands.add("login", ({ username, password }) => {
   });
 });
 
+Cypress.Commands.add("logout", () => {
+  localStorage.removeItem("user");
+});
+
 Cypress.Commands.add("getAllBlogs", (newBlog) => {
   cy.request({
     url: `${Cypress.env("backend")}/blogs`,

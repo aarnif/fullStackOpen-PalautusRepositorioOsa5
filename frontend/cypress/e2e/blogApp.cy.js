@@ -1,12 +1,18 @@
 describe("Blog app", function () {
   beforeEach(function () {
     cy.request("POST", `${Cypress.env("backend")}/testing/reset`);
-    const user = {
+    const user1 = {
       name: "John Doe",
       username: "johnD",
       password: "horsemeat",
     };
-    cy.request("POST", `${Cypress.env("backend")}/users`, user);
+    const user2 = {
+      name: "Jane Doe",
+      username: "janeD",
+      password: "horsemeat",
+    };
+    cy.request("POST", `${Cypress.env("backend")}/users`, user1);
+    cy.request("POST", `${Cypress.env("backend")}/users`, user2);
     cy.visit("");
   });
 
@@ -66,6 +72,18 @@ describe("Blog app", function () {
         cy.deleteBlog(idValue);
       });
       cy.get("html").should("not.contain", "Express is awesome!");
+    });
+
+    it("show blogs delete button if user same", function () {
+      cy.contains("Express is awesome!").contains("view").click();
+      cy.contains("Express is awesome!").contains("Remove");
+    });
+
+    it("do not show blogs delete button if user is not same", function () {
+      cy.logout();
+      cy.login({ username: "janeD", password: "horsemeat" });
+      cy.contains("Express is awesome!").contains("view").click();
+      cy.contains("Express is awesome!").should("not.contain", "Remove");
     });
   });
 });
