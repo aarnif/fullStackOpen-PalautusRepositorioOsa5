@@ -48,9 +48,27 @@ describe("Blog app", function () {
     };
 
     beforeEach(function () {
+      cy.logout();
       cy.login({ username: "johnD", password: "horsemeat" });
       cy.contains("logged in");
-      cy.addBlog(newBlogContent);
+      cy.addBlog({
+        title: "Express is awesome!",
+        author: "Jimmy Doolittle",
+        url: "http://www.fakeblogsite.com/post1",
+        likes: 100,
+      });
+      cy.addBlog({
+        title: "Javascript 101",
+        author: "Ronald Reagan",
+        url: "http://www.fakeblogsite.com/post3",
+        likes: 0,
+      });
+      cy.addBlog({
+        title: "React is awesome!",
+        author: "John Hancock",
+        url: "http://www.fakeblogsite.com/post2",
+        likes: 50,
+      });
       cy.visit("");
     });
 
@@ -84,6 +102,12 @@ describe("Blog app", function () {
       cy.login({ username: "janeD", password: "horsemeat" });
       cy.contains("Express is awesome!").contains("view").click();
       cy.contains("Express is awesome!").should("not.contain", "Remove");
+    });
+
+    it("blogs are sorted by likes in descending order", function () {
+      cy.get(".blog").eq(0).should("contain", "Express is awesome!");
+      cy.get(".blog").eq(1).should("contain", "React is awesome!");
+      cy.get(".blog").eq(2).should("contain", "Javascript 101");
     });
   });
 });
