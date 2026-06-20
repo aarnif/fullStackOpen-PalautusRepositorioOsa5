@@ -17,6 +17,10 @@ const App = () => {
   const successMessageType = "success";
   const errorMessageType = "error";
 
+  const fetchBlogs = () => {
+    Blogservice.getAll().then((blogs) => setBlogs(blogs));
+  };
+
   useEffect(() => {
     const getUser = window.localStorage.getItem("user");
     console.log(getUser);
@@ -25,12 +29,9 @@ const App = () => {
       setUser(user);
       console.log(user.token);
       Blogservice.setToken(user.token);
+      fetchBlogs();
     }
   }, []);
-
-  useEffect(() => {
-    Blogservice.getAll().then((blogs) => setBlogs(blogs));
-  }, [blogs]);
 
   const handleLogin = async () => {
     event.preventDefault();
@@ -45,6 +46,7 @@ const App = () => {
       });
       window.localStorage.setItem("user", JSON.stringify(user));
       Blogservice.setToken(user.token);
+      fetchBlogs();
       setUser(user);
       setUsername("");
       setPassword("");
@@ -62,6 +64,7 @@ const App = () => {
     let result = false;
     try {
       const newBlog = await Blogservice.add(blogObject);
+      fetchBlogs();
       displayMessage(
         `Added new blog titled: ${newBlog.title}`,
         successMessageType
@@ -77,6 +80,7 @@ const App = () => {
   const updateBlog = async (blogObject) => {
     try {
       const updateBlog = await Blogservice.update(blogObject);
+      fetchBlogs();
       displayMessage(
         `Updated likes for blog titled: ${updateBlog.title}`,
         successMessageType
@@ -89,6 +93,7 @@ const App = () => {
   const deleteBlog = async (blogObject) => {
     try {
       const deleteBlog = await Blogservice.remove(blogObject);
+      fetchBlogs();
       displayMessage(
         `Removed blog titled: ${blogObject.title}`,
         successMessageType
